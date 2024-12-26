@@ -1,0 +1,124 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_ROOMS 100
+
+// Structure to hold room details
+typedef struct {
+    int roomNumber;
+    char roomType[20];
+    int isAvailable; // 1 for available, 0 for booked
+    float price;
+} Room;
+
+// Function prototypes
+void initializeRooms(Room rooms[], int *roomCount);
+void displayRooms(Room rooms[], int roomCount);
+void bookRoom(Room rooms[], int roomCount);
+void cancelBooking(Room rooms[], int roomCount);
+
+int main() {
+    Room rooms[MAX_ROOMS];
+    int roomCount = 0, choice;
+
+    // Initialize room details
+    initializeRooms(rooms, &roomCount);
+
+    do {
+        printf("\n--- Hotel Management System ---\n");
+        printf("1. View Room Details\n");
+        printf("2. Book a Room\n");
+        printf("3. Cancel a Booking\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                displayRooms(rooms, roomCount);
+                break;
+            case 2:
+                bookRoom(rooms, roomCount);
+                break;
+            case 3:
+                cancelBooking(rooms, roomCount);
+                break;
+            case 4:
+                printf("Exiting the system. Thank you!\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+
+// Function to initialize room details
+void initializeRooms(Room rooms[], int *roomCount) {
+    *roomCount = 5;
+
+    rooms[0] = (Room){101, "Single", 1, 1000.0};
+    rooms[1] = (Room){102, "Double", 1, 2000.0};
+    rooms[2] = (Room){103, "Suite", 1, 5000.0};
+    rooms[3] = (Room){104, "Single", 1, 1000.0};
+    rooms[4] = (Room){105, "Double", 1, 2000.0};
+
+    printf("Rooms initialized successfully.\n");
+}
+
+// Function to display room details
+void displayRooms(Room rooms[], int roomCount) {
+    printf("\n--- Room Details ---\n");
+    printf("Room Number | Type      | Availability | Price\n");
+    printf("-----------------------------------------------\n");
+    for (int i = 0; i < roomCount; i++) {
+        printf("%11d | %-9s | %-12s | %.2f\n", 
+               rooms[i].roomNumber, 
+               rooms[i].roomType, 
+               rooms[i].isAvailable ? "Available" : "Booked", 
+               rooms[i].price);
+    }
+}
+
+// Function to book a room
+void bookRoom(Room rooms[], int roomCount) {
+    int roomNumber;
+    printf("\nEnter the room number to book: ");
+    scanf("%d", &roomNumber);
+
+    for (int i = 0; i < roomCount; i++) {
+        if (rooms[i].roomNumber == roomNumber) {
+            if (rooms[i].isAvailable) {
+                rooms[i].isAvailable = 0;
+                printf("Room %d booked successfully.\n", roomNumber);
+                return;
+            } else {
+                printf("Room %d is already booked.\n", roomNumber);
+                return;
+            }
+        }
+    }
+    printf("Room %d not found.\n", roomNumber);
+}
+
+// Function to cancel a booking
+void cancelBooking(Room rooms[], int roomCount) {
+    int roomNumber;
+    printf("\nEnter the room number to cancel booking: ");
+    scanf("%d", &roomNumber);
+
+    for (int i = 0; i < roomCount; i++) {
+        if (rooms[i].roomNumber == roomNumber) {
+            if (!rooms[i].isAvailable) {
+                rooms[i].isAvailable = 1;
+                printf("Booking for room %d canceled successfully.\n", roomNumber);
+                return;
+            } else {
+                printf("Room %d is already available.\n", roomNumber);
+                return;
+            }
+        }
+    }
+    printf("Room %d not found.\n", roomNumber);
+}
