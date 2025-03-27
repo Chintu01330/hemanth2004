@@ -262,5 +262,5 @@ void LastDetail()
     printf("Total balance = %d\n ", amt);
 
     printf("\n\nPress any key to exit.....");
-Â Â Â Â getch();
+ getch();
 }
